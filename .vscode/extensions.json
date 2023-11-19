@@ -1,0 +1,23 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=827846 to learn about workspace recommendations.
+  // Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
+  // List of extensions which should be recommended for users of this workspace.
+  "recommendations": [
+    "vscodevim.vim",
+    "ms-vscode-remote.vscode-remote-extensionpack",
+    "IBM.output-colorizer",
+    "enkia.tokyo-night",
+    "JScearcy.rust-doc-viewer",
+    "malmaud.tmux",
+    "oderwat.indent-rainbow",
+    "panicbit.cargo",
+    "swellaby.rust-pack",
+    "dustypomerleau.rust-syntax",
+    "skyapps.fish-vscode",
+    "vscode-icons-team.vscode-icons",
+    "wraith13.bracket-lens",
+    "charliermarsh.ruff"
+  ],
+  // List of extensions recommended by VS Code that should not be recommended for users of this workspace.
+  "unwantedRecommendations": []
+}
