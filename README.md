@@ -113,7 +113,7 @@ volta install npm
 volta install pnpm
 ```
 
-## oh-my-posh
+### oh-my-posh
 
 ```bash
 brew install jandedobbeleer/oh-my-posh/oh-my-posh
@@ -122,20 +122,18 @@ brew update && brew upgrade oh-my-posh
 
 I recommend [easy-term theme](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/easy-term.omp.json)
 
-## vim
+## Sync dotfiles
+
+Run `bootstrap.sh`. Or
+
+### vim
 
 ```bash
 ln -sf $DOTFILEDIR/.vimrc $HOME/.vimrc
 ```
 
-## tmux
+### tmux
 
 ```bash
 ln -sf $DOTFILEDIR/.tmux.conf $HOME/.tmux.conf
-```
-
-## nu shell
-
-```sh
-brew install nushell
 ```
