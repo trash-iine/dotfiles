@@ -82,12 +82,12 @@ Install Rust according to [Homepage](https://www.rust-lang.org/learn/get-started
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-Select `1) Proceed with installation (default)`.
+Select `1) Proceed with installation (default)`. (`install.sh` passes `-y` instead, so it never shows this prompt.)
 
-Then install `volta`, `cargo-update` and `topgrade`.
+Then install `cargo-update` and `topgrade`.
 
 ```bash
-cargo install volta
+source "$HOME/.cargo/env"
 cargo install cargo-update
 cargo install topgrade
 ```
@@ -103,14 +103,27 @@ rustup: OK
 cargo: OK
 ```
 
-### npm
+### node (mise)
 
-Install npm with volta.
+Node is managed with [mise](https://mise.jdx.dev). (This used to be volta, which is no longer maintained.)
 
 ```bash
-volta install node
-volta install npm
-volta install pnpm
+brew install mise
+mise use -g node@lts
+mise use -g npm:pnpm
+```
+
+npm ships with node, so it needs no separate install.
+
+mise has to be activated by your shell. `bootstrap.sh` takes care of fish; for bash, add it yourself:
+
+```bash
+echo 'eval "$(mise activate bash)"' >> ~/.bashrc
+```
+
+```fish
+# ~/.config/fish/config.fish
+mise activate fish | source
 ```
 
 ### oh-my-posh
@@ -124,16 +137,16 @@ I recommend [easy-term theme](https://github.com/JanDeDobbeleer/oh-my-posh/blob/
 
 ## Sync dotfiles
 
-Run `bootstrap.sh`. Or
-
-### vim
+Run `bootstrap.sh` from the repository. It prompts before overwriting; pass `-f` (or `--force`) to skip the prompt.
 
 ```bash
-ln -sf $DOTFILEDIR/.vimrc $HOME/.vimrc
+./bootstrap.sh
 ```
 
-### tmux
+It runs `git pull origin main` first, then copies these files into your home directory:
 
-```bash
-ln -sf $DOTFILEDIR/.tmux.conf $HOME/.tmux.conf
-```
+* `.vimrc`
+* `.tmux.conf`
+* `.config/fish/config.fish`
+
+The files are **copied**, not symlinked, so re-run `bootstrap.sh` after every `git pull` to pick up changes. Copying your own edits back into the repository (rather than symlinking `$HOME` to it) keeps the two in sync in one direction only — edit the files here, not in `$HOME`.
