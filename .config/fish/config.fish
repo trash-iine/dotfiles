@@ -1,3 +1,9 @@
+# Set outside the interactive guard so scripts and git see it too.
+if type -q nvim
+    set -gx EDITOR nvim
+    set -gx VISUAL nvim
+end
+
 if status is-interactive
     # Commands to run in interactive sessions can go here
 

@@ -8,11 +8,14 @@ git pull origin main;
 function syncDot() {
 	# rsync matches these rules against each path component as it descends, so
 	# the parent directories need including before the nested file is reachable.
+	# The nvim tree is too deep to list file by file, so it gets a recursive "**".
 	rsync --include ".tmux.conf" \
 		--include ".vimrc" \
 		--include ".config/" \
 		--include ".config/fish/" \
 		--include ".config/fish/config.fish" \
+		--include ".config/nvim/" \
+		--include ".config/nvim/**" \
 		--exclude "*" \
 		-avh --no-perms . ~;
 }
