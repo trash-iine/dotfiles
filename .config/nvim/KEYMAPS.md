@@ -54,12 +54,29 @@
 
 ## Git (gitsigns)
 
+| キー | モード | 説明 |
+|---|---|---|
+| `]c` / `[c` | normal | 次/前の hunk |
+| `<leader>hi` | normal | hunk をインライン展開 (削除行をバッファ内に表示、カーソル移動で消える) |
+| `<leader>hp` | normal | hunk をフロートでプレビュー |
+| `<leader>hs` | normal / visual | hunk をステージング (ステージ済みなら解除) |
+| `<leader>hr` | normal / visual | hunk をリセット |
+| `<leader>hS` | normal | バッファ全体をステージング |
+| `<leader>hR` | normal | バッファ全体をリセット |
+| `<leader>hb` | normal | この行の blame を表示 (詳細) |
+| `<leader>hd` | normal | index との diff |
+| `<leader>hD` | normal | 直前のコミットとの diff |
+| `ih` | operator / visual | hunk をテキストオブジェクトとして選択 (`vih`, `dih`) |
+
+常時有効: 行番号の差分ハイライト (numhl)、変更行内の単語差分 (word_diff)、カーソル行末の blame。
+
+## トグル
+
 | キー | 説明 |
 |---|---|
-| `]c` / `[c` | 次/前の hunk |
-| `<leader>hs` | hunk をステージング |
-| `<leader>hr` | hunk をリセット |
-| `<leader>hp` | hunk をプレビュー |
+| `<leader>tb` | カーソル行末の blame 表示をトグル |
+| `<leader>tw` | 単語単位の差分ハイライトをトグル |
+| `<leader>tn` | 行番号の差分ハイライトをトグル |
 
 ## コメント (Comment.nvim)
 
