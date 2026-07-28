@@ -1,0 +1,11 @@
+# Global gitignore -- core.excludesfile points here by way of the XDG path.
+
+# Claude Code writes per-project overrides that are never worth committing.
+**/.claude/settings.local.json
+
+# macOS
+.DS_Store
+
+# Windows, which shares repositories with WSL2
+Thumbs.db
+desktop.ini

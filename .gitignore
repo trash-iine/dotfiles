@@ -1,0 +1,22 @@
+# bootstrap.sh symlinks whole directories into $HOME, so anything the apps write
+# back lands inside this repository. The runtime state is excluded here; the
+# configuration they write (lazy-lock.json, git config) is meant to be tracked.
+
+# fish rewrites these on every session.
+.config/fish/fish_variables
+.config/fish/fish_history
+.config/fish/completions/
+# Machine-specific shell settings.
+.config/fish/conf.d/*.local.fish
+
+# Machine-specific git identity, pulled in by [include] in .config/git/config.
+.config/git/config.local
+
+.claude/settings.local.json
+.config/nvim/.claude/
+
+Brewfile.lock.json
+
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,9 @@
+# bat's built-in themes do not include Tokyo Night, which nvim and VSCode use.
+# Nord is the closest of the bundled dark themes. `bat --list-themes` shows the
+# rest. .config/git/config points delta's syntax-theme at the same name.
+--theme="Nord"
+
+--style="numbers,changes,header"
+
+# Long lines wrap rather than scroll off, which matters inside a tmux pane.
+--wrap=auto

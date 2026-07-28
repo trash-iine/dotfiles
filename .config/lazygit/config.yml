@@ -1,0 +1,29 @@
+gui:
+  # The Nerd Font installed by the Brewfile on macOS, and by hand on Windows for
+  # WSL2, is version 3.
+  nerdFontsVersion: "3"
+  showFileTree: true
+  showRandomTip: false
+  # Tokyo Night, to match the nvim colorscheme.
+  theme:
+    activeBorderColor:
+      - "#7aa2f7"
+      - bold
+    inactiveBorderColor:
+      - "#565f89"
+    selectedLineBgColor:
+      - "#292e42"
+    optionsTextColor:
+      - "#7aa2f7"
+
+os:
+  # config.fish sets EDITOR, but lazygit is also launched from places that do
+  # not go through fish.
+  edit: "nvim {{filename}}"
+  editAtLine: "nvim +{{line}} {{filename}}"
+
+git:
+  paging:
+    # Same pager as core.pager in .config/git/config.
+    colorArg: always
+    pager: delta --dark --paging=never
