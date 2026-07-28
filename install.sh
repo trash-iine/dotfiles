@@ -42,13 +42,20 @@ grep -q "brew shellenv" ~/.profile 2>/dev/null || echo "eval \$($BREW_PREFIX/bin
 # fish
 echo "############# fish install #############"
 
+# Linuxbrew has no casks and the apt package is what the WSL2 setup has always
+# used, so fish comes from the PPA there and from the Brewfile on macOS.
 if [ "$OS" = "Linux" ]; then
 	sudo apt-add-repository -y ppa:fish-shell/release-3
 	sudo apt update
 	sudo apt install -y fish
-else
-	brew install fish
 fi
+
+# packages
+echo "############# brew bundle #############"
+
+# Everything else -- neovim, the CLI tools, the build toolchain -- is listed in
+# the Brewfile, which splits the platform-specific entries itself.
+brew bundle --file="$PWD/Brewfile"
 
 # rust
 echo "############# rust install #############"
@@ -58,35 +65,34 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 # on PATH for the current run.
 # shellcheck disable=SC1091
 source "$HOME/.cargo/env"
+# cargo-update only makes sense for crates installed with cargo, so it stays
+# here rather than in the Brewfile. topgrade moved to the Brewfile.
 cargo install cargo-update
-cargo install topgrade
 
 # node
 echo "############# mise / node install #############"
 
-# brew shellenv above already put mise on PATH; npm ships with node.
-brew install mise
+# mise comes from the Brewfile; fish activates it in conf.d/10-tools.fish, and
+# bash needs the line below because it stays the non-interactive shell on WSL2.
 grep -q "mise activate bash" ~/.bashrc 2>/dev/null || echo 'eval "$(mise activate bash)"' >> ~/.bashrc
 mise use -g node@lts
 mise use -g npm:pnpm
 
-# oh-my-posh
-echo "############# oh-my-posh install #############"
+# login shell
+echo "############# login shell #############"
 
-brew install jandedobbeleer/oh-my-posh/oh-my-posh
-brew update && brew upgrade oh-my-posh
-
-# neovim
-echo "############# neovim install #############"
-
-# The config in .config/nvim needs Neovim >= 0.11 (vim.lsp.config,
-# vim.diagnostic.jump, vim.hl.on_yank), so brew is used on Linux too -- the apt
-# package is far too old. ripgrep and fd back Telescope's grep and file search,
-# and the tree-sitter CLI is required by nvim-treesitter's main branch.
-brew install neovim ripgrep fd tree-sitter
-
-if [ "$OS" = "Darwin" ]; then
-	# neo-tree, lualine and which-key render Nerd Font glyphs. On Windows the
-	# font is installed by hand (see README).
-	brew install --cask font-roboto-mono-nerd-font
+# The path differs per platform -- /usr/bin/fish from apt on WSL2, the brew
+# prefix on macOS -- so it is looked up rather than hardcoded. chsh asks for a
+# password, which is why this runs last.
+FISH="$(command -v fish)"
+if [ -n "$FISH" ]; then
+	grep -qx "$FISH" /etc/shells || echo "$FISH" | sudo tee -a /etc/shells >/dev/null
+	if [ "${SHELL:-}" != "$FISH" ]; then
+		chsh -s "$FISH"
+		if [ "$OS" = "Linux" ]; then
+			echo "Run 'wsl --shutdown' from Windows and reopen WSL for this to take effect."
+		else
+			echo "Open a new terminal for this to take effect."
+		fi
+	fi
 fi
