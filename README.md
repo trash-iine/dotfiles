@@ -362,18 +362,38 @@ For a machine-specific identity (a work email, a signing key), write
 
 ## Claude Code
 
-`.claude/settings.json` is the global Claude Code configuration (model, effort
-level, TUI renderer) plus a `permissions.deny` list that keeps Claude out of
-credential stores: `~/.ssh`, `~/.gnupg`, `~/.password-store`, `~/.aws`,
-`~/.config/gh`, `~/.config/gcloud`, `~/.kube`, `~/.netrc`, the macOS keychain
-files, any `.env`, `*.pem`, `*.key` or `id_rsa*` anywhere on disk, and the
-commands that read those stores (`pass`, `gopass`, `op`, `gpg -d`,
-`security find-*-password`, `gh auth token`, `printenv`).
+`.claude/settings.json` is the global Claude Code configuration. Besides the
+model, effort level and TUI renderer it sets `language` (Japanese, which the
+skills and notes are written in), `cleanupPeriodDays` (90 rather than the
+default 30, so `~/.claude/projects/*/` still holds enough transcript history to
+look back through), `fallbackModel` (Sonnet, so a busy Opus does not stall a
+session) and an empty `attribution`, which drops the `Co-Authored-By: Claude`
+trailer from commits and the signature from PR bodies.
 
-Denied paths are also passed to the sandbox as read-denied, so a sandboxed shell
-cannot reach them either. Outside the sandbox the `Bash(...)` rules are prefix
-matches, not a security boundary — they stop the obvious `pass show foo`, not a
-deliberately obfuscated command.
+The rest of the file is permissions. They apply in the order deny > ask > allow:
+
+* `deny` keeps Claude out of the credential stores — `~/.ssh`, `~/.gnupg`,
+  `~/.password-store`, `~/.aws`, `~/.config/gh`, `~/.config/gcloud`, `~/.kube`,
+  `~/.netrc`, the macOS keychain files, any `.env`, `*.pem`, `*.key` or
+  `id_rsa*` anywhere on disk — and out of the commands that read them (`pass`,
+  `gopass`, `op`, `gpg -d`, `security find-*-password`, `gh auth token`,
+  `printenv`).
+* `ask` forces a confirmation for what cannot be undone: `git push`,
+  `reset --hard`, `clean`, `rebase`, `branch -d/-D`, `checkout --`, `rm -rf`.
+  This is what makes auto mode safe to leave on — auto mode approves on its own,
+  and these rules pull the prompt back.
+* `allow` covers reading and looking around — `git status`/`diff`/`log`/`show`,
+  `rg`, `fd`, `eza`, `bat`, `jq`, `mise ls`, the read-only `gh` subcommands. The
+  commands are the ones the Brewfile installs. `git remote` is allowed only as
+  the exact `git remote -v`, because `git remote set-url` can redirect a push.
+
+Two caveats. Denied paths are passed to the sandbox as read-denied, but outside
+the sandbox the `Bash(...)` rules are prefix matches, not a security boundary —
+they stop the obvious `pass show foo`, not a deliberately obfuscated command.
+And a `Read(...)` deny does not cover reads that go through the shell: allowing
+`bat`, `head`, `tail` and `rg` leaves `bat ~/.ssh/id_rsa` reachable. That is a
+deliberate trade for not being asked about every `rg`; what stays blocked is the
+commands that *extract* a secret rather than print a file.
 
 `~/.claude` holds session state, caches and the daemon socket, so this is the
 one path linked as a single file rather than as a directory. Changing a setting
