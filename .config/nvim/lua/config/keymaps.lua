@@ -24,3 +24,6 @@ map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move line up" })
 -- Keep cursor centered
 map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
+
+-- Escape insert mode
+map("i", "jj", "<Esc>", { desc = "Escape insert mode" })

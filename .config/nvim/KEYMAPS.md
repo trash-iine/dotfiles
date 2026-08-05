@@ -7,6 +7,7 @@
 | キー | モード | 説明 |
 |---|---|---|
 | `<Esc>` | normal | 検索ハイライト解除 |
+| `jj` | insert | Normal モードへ戻る |
 | `<leader>w` | normal | 保存 |
 | `<leader>q` | normal | 終了 |
 | `<C-h/j/k/l>` | normal | ウィンドウ移動 (左/下/上/右) |
