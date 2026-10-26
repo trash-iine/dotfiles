@@ -303,6 +303,9 @@ Linked paths:
 * `.config/lazygit/`
 * `.claude/settings.json`
 * `.zshenv`, `.zprofile` (macOS only)
+* `.config/cmux/sidebars/*` (macOS only, file by file because cmux does not
+  read a symlinked sidebars directory; run `cmux sidebar select workspaces-apps`
+  once to activate, and `cmux sidebar reload` if an edit here does not show up)
 
 Because these are symlinks and not copies, editing a file in `$HOME` and editing
 it here are the same thing, and `git pull` takes effect immediately — there is

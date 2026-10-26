@@ -49,6 +49,17 @@ if [ "$(uname -s)" = "Darwin" ]; then
 	LINKS+=(.zshenv .zprofile)
 fi
 
+# cmux is macOS-only. Only the custom sidebars are linked: cmux.json and
+# settings.json are rewritten by the app, and which sidebar is active lives in
+# cmux's own state (`cmux sidebar select <name>` once on a new machine).
+# Unlike the directories above, these are linked file by file: cmux does not
+# list a sidebars directory that is itself a symlink.
+if [ "$(uname -s)" = "Darwin" ]; then
+	for f in "$REPO"/.config/cmux/sidebars/*; do
+		LINKS+=(".config/cmux/sidebars/$(basename "$f")")
+	done
+fi
+
 DRY_RUN=0
 FORCE=0
 
